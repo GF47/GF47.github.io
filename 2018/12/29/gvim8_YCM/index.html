@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="gvim8.1版本的YouCompleteMe补全插件安装小结 一、前置环境1、Git for windows2、python 3.x注意python的版本需要对应vim的要求，最新版的vim一般同样是在新版本python环境下编译的。如果机器上默认的是旧版本的python，比如3.6版，又不想升级py，就需要自己编译vim了…… 3、64位支持python的vim跟python版本对应，一般vi">
+<meta name="keywords" content="vim,YouCompleteMe,补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gvim8.1版本的YouCompleteMe补全插件安装小结">
+<meta property="og:url" content="https://gf47.github.io/2018/12/29/gvim8_YCM/index.html">
+<meta property="og:site_name" content="GF47的鱼缸">
+<meta property="og:description" content="gvim8.1版本的YouCompleteMe补全插件安装小结 一、前置环境1、Git for windows2、python 3.x注意python的版本需要对应vim的要求，最新版的vim一般同样是在新版本python环境下编译的。如果机器上默认的是旧版本的python，比如3.6版，又不想升级py，就需要自己编译vim了…… 3、64位支持python的vim跟python版本对应，一般vi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gf47.github.io/2018/12/29/gvim8_YCM/20181228195714975_5422.png">
+<meta property="og:image" content="https://gf47.github.io/2018/12/29/gvim8_YCM/20181228201439701_1026.png">
+<meta property="og:image" content="https://gf47.github.io/2018/12/29/gvim8_YCM/20181228201838352_29388.png">
+<meta property="og:updated_time" content="2019-01-02T16:55:09.891Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gvim8.1版本的YouCompleteMe补全插件安装小结">
+<meta name="twitter:description" content="gvim8.1版本的YouCompleteMe补全插件安装小结 一、前置环境1、Git for windows2、python 3.x注意python的版本需要对应vim的要求，最新版的vim一般同样是在新版本python环境下编译的。如果机器上默认的是旧版本的python，比如3.6版，又不想升级py，就需要自己编译vim了…… 3、64位支持python的vim跟python版本对应，一般vi">
+<meta name="twitter:image" content="https://gf47.github.io/2018/12/29/gvim8_YCM/20181228195714975_5422.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://gf47.github.io/2018/12/29/gvim8_YCM/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>gvim8.1版本的YouCompleteMe补全插件安装小结 | GF47的鱼缸</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GF47的鱼缸</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">欸乃一声山水绿</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gf47.github.io/2018/12/29/gvim8_YCM/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GF47">
+      <meta itemprop="description" content="Unity 3D 咸鱼一条,偶尔在Python和lua里游一游">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GF47的鱼缸">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gvim8.1版本的YouCompleteMe补全插件安装小结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-29 18:03:10" itemprop="dateCreated datePublished" datetime="2018-12-29T18:03:10+08:00">2018-12-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-03 00:55:09" itemprop="dateModified" datetime="2019-01-03T00:55:09+08:00">2019-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/vim/" itemprop="url" rel="index"><span itemprop="name">vim</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/12/29/gvim8_YCM/" class="leancloud_visitors" data-flag-title="gvim8.1版本的YouCompleteMe补全插件安装小结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="gvim8-1版本的YouCompleteMe补全插件安装小结"><a href="#gvim8-1版本的YouCompleteMe补全插件安装小结" class="headerlink" title="gvim8.1版本的YouCompleteMe补全插件安装小结"></a>gvim8.1版本的YouCompleteMe补全插件安装小结</h1><hr>
+<h2 id="一、前置环境"><a href="#一、前置环境" class="headerlink" title="一、前置环境"></a>一、前置环境</h2><h3 id="1、Git-for-windows"><a href="#1、Git-for-windows" class="headerlink" title="1、Git for windows"></a>1、<a href="https://github.com/git-for-windows/git/releases" target="_blank" rel="noopener">Git for windows</a></h3><h3 id="2、python-3-x"><a href="#2、python-3-x" class="headerlink" title="2、python 3.x"></a>2、<a href="https://www.python.org/downloads/release" target="_blank" rel="noopener">python 3.x</a></h3><p>注意python的版本需要对应vim的要求，最新版的vim一般同样是在新版本python环境下编译的。如果机器上默认的是旧版本的python，比如3.6版，又不想升级py，就需要自己编译vim了……</p>
+<h3 id="3、64位支持python的vim"><a href="#3、64位支持python的vim" class="headerlink" title="3、64位支持python的vim"></a>3、<a href="https://github.com/vim/vim-win32-installer/releases" target="_blank" rel="noopener">64位支持python的vim</a></h3><p>跟python版本对应，一般vim for windows的发布页会有 <strong>Compiled with</strong> 的说明，保证python版本不低于vim需要的版本。<br><img src="/2018/12/29/gvim8_YCM/20181228195714975_5422.png" alt="版本对应"><br>如果已经安装了vim，则需要查看是否支持python。在vim中输入 <code>:version</code> ，查看是否有 <strong>+python3</strong> ，如果是 <strong>-python3</strong> ，则说明不支持，需要重新安装vim；再查看编译方式中是否有类似 <strong>-DDYNAMIC_PYTHON3_DLL=\”python37.dll\”</strong> 的项，确定具体的python版本。<br><img src="/2018/12/29/gvim8_YCM/20181228201439701_1026.png" alt="确定vim是否支持python3"><br><img src="/2018/12/29/gvim8_YCM/20181228201838352_29388.png" alt="确定支持的python版本">  </p>
+<h3 id="4、CMake"><a href="#4、CMake" class="headerlink" title="4、CMake"></a>4、<a href="https://cmake.org/download/" target="_blank" rel="noopener">CMake</a></h3><h3 id="5、7zip"><a href="#5、7zip" class="headerlink" title="5、7zip"></a>5、<a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener">7zip</a></h3><h3 id="6、Visual-Studio-2015-或更新版本"><a href="#6、Visual-Studio-2015-或更新版本" class="headerlink" title="6、Visual Studio 2015 或更新版本"></a>6、<a href="https://visualstudio.microsoft.com/zh-hans/downloads" target="_blank" rel="noopener">Visual Studio 2015 或更新版本</a></h3><p>vs需要安装C++模块。</p>
+<blockquote>
+<p>注意要将git、python、cmake、7zip添加到环境变量，保证在命令提示符中输入相关命令不会报错。因为在YCM的编译脚本 <em>install.py</em> 中，默认认为环境变量中是有这些命令的。  </p>
+</blockquote>
+<h3 id="7、使用Vundle或Vim-plug等工具来下载YCM"><a href="#7、使用Vundle或Vim-plug等工具来下载YCM" class="headerlink" title="7、使用Vundle或Vim-plug等工具来下载YCM"></a>7、使用<a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="noopener">Vundle</a>或<a href="https://github.com/junegunn/vim-plug" target="_blank" rel="noopener">Vim-plug</a>等工具来下载<a href="https://github.com/Valloric/YouCompleteMe" target="_blank" rel="noopener">YCM</a></h3><p>举例通过Vundle安装，修改<code>_vimrc[.vimrc]</code>文件。<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">filetype</span> off</span><br><span class="line"><span class="keyword">set</span> rtp+=$HOME/.<span class="keyword">vim</span>/bundle/Vundle.<span class="keyword">vim</span>/</span><br><span class="line"><span class="keyword">call</span> vundle#begin(<span class="string">'$HOME/.vim/bundle/'</span>)</span><br><span class="line">Plugin <span class="string">'VundleVim/Vundle.vim'</span></span><br><span class="line">...</span><br><span class="line">Plugin <span class="string">'Valloric/YouCompleteMe'</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">call</span> vundle#end()</span><br><span class="line"><span class="keyword">filetype</span> plugin <span class="built_in">indent</span> <span class="keyword">on</span></span><br></pre></td></tr></table></figure></p>
+<p>打开vim，输入<code>:PluginInstall</code>，等待git克隆完毕。</p>
+<h2 id="二、编译YCM"><a href="#二、编译YCM" class="headerlink" title="二、编译YCM"></a>二、编译YCM</h2><ul>
+<li>在开始菜单中打开 <strong>适用于 VS 2017[5] 的 x64 本机工具命令提示</strong> ，这样可以省略将 <strong>msbuild</strong> 加入环境变量的步骤，而且能确保ms工具链的完整。</li>
+<li>cd至YCM路径，默认为 <em>~/.vim/bundle/YouCompleteMe</em> ，输入 <code>python install.py</code>。<blockquote>
+<p><code>python install.py</code> 可以添加参数，具体可以参见目录下的 <em>README.md</em> 文件。尽量不要使用<code>--all</code>参数。</p>
+</blockquote>
+</li>
+<li>每次YCM更新后，需要重新编译。</li>
+</ul>
+<h2 id="三、配置YCM"><a href="#三、配置YCM" class="headerlink" title="三、配置YCM"></a>三、配置YCM</h2><p>这个见仁见智了，有<a href="https://zhuanlan.zhihu.com/p/33046090" target="_blank" rel="noopener">大佬珠玉在前</a>，按照YCM官方的建议瞎配配就完事了，敲代码的时候哪不爽了再改，只有用过了才知道哪需要修理。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vim/" rel="tag"># vim</a>
+          
+            <a href="/tags/YouCompleteMe/" rel="tag"># YouCompleteMe</a>
+          
+            <a href="/tags/补全/" rel="tag"># 补全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/14/Hexo博客/" rel="next" title="使用Hexo搭建github博客">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建github博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="GF47">
+            
+              <p class="site-author-name" itemprop="name">GF47</p>
+              <p class="site-description motion-element" itemprop="description">Unity 3D 咸鱼一条,偶尔在Python和lua里游一游</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/GF47" title="GitHub &rarr; https://github.com/GF47" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:liougourenmo@gmail.com" title="E-Mail &rarr; mailto:liougourenmo@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gvim8-1版本的YouCompleteMe补全插件安装小结"><span class="nav-number">1.</span> <span class="nav-text">gvim8.1版本的YouCompleteMe补全插件安装小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、前置环境"><span class="nav-number">1.1.</span> <span class="nav-text">一、前置环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、Git-for-windows"><span class="nav-number">1.1.1.</span> <span class="nav-text">1、Git for windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、python-3-x"><span class="nav-number">1.1.2.</span> <span class="nav-text">2、python 3.x</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、64位支持python的vim"><span class="nav-number">1.1.3.</span> <span class="nav-text">3、64位支持python的vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、CMake"><span class="nav-number">1.1.4.</span> <span class="nav-text">4、CMake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、7zip"><span class="nav-number">1.1.5.</span> <span class="nav-text">5、7zip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6、Visual-Studio-2015-或更新版本"><span class="nav-number">1.1.6.</span> <span class="nav-text">6、Visual Studio 2015 或更新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7、使用Vundle或Vim-plug等工具来下载YCM"><span class="nav-number">1.1.7.</span> <span class="nav-text">7、使用Vundle或Vim-plug等工具来下载YCM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、编译YCM"><span class="nav-number">1.2.</span> <span class="nav-text">二、编译YCM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、配置YCM"><span class="nav-number">1.3.</span> <span class="nav-text">三、配置YCM</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GF47</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "aBji1KCAd8ffRsjGAmnl52QB-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "aBji1KCAd8ffRsjGAmnl52QB-gzGzoHsz",
+                'X-LC-Key': "QNuwEsJzfoU703CGEK3ocenV",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

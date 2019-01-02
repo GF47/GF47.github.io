@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="新到手了一个树莓派板子，省电又不占地方，遂玩耍一番。 为什么选择Gogs而不是GitLab，很明显，以GitLab的量级来说，相当于津巴布韦总统捏着一颗核弹，一搭好，这个板子就可以放那吃灰了。而Gogs这种小当量的玩意，对树莓派来说刚好合适。 在树莓派上搭建Gogs服务 Gogs 首页https://gogs.io 下载https://gogs.io/docs/installation/insta">
+<meta name="keywords" content="树莓派,Gogs,git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在树莓派上搭建Gogs服务">
+<meta property="og:url" content="https://gf47.github.io/2018/03/09/Gogs_in_Raspberry_Pi/index.html">
+<meta property="og:site_name" content="GF47的鱼缸">
+<meta property="og:description" content="新到手了一个树莓派板子，省电又不占地方，遂玩耍一番。 为什么选择Gogs而不是GitLab，很明显，以GitLab的量级来说，相当于津巴布韦总统捏着一颗核弹，一搭好，这个板子就可以放那吃灰了。而Gogs这种小当量的玩意，对树莓派来说刚好合适。 在树莓派上搭建Gogs服务 Gogs 首页https://gogs.io 下载https://gogs.io/docs/installation/insta">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gf47.github.io/2018/03/09/Gogs_in_Raspberry_Pi/download.png">
+<meta property="og:updated_time" content="2018-03-09T12:36:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在树莓派上搭建Gogs服务">
+<meta name="twitter:description" content="新到手了一个树莓派板子，省电又不占地方，遂玩耍一番。 为什么选择Gogs而不是GitLab，很明显，以GitLab的量级来说，相当于津巴布韦总统捏着一颗核弹，一搭好，这个板子就可以放那吃灰了。而Gogs这种小当量的玩意，对树莓派来说刚好合适。 在树莓派上搭建Gogs服务 Gogs 首页https://gogs.io 下载https://gogs.io/docs/installation/insta">
+<meta name="twitter:image" content="https://gf47.github.io/2018/03/09/Gogs_in_Raspberry_Pi/download.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://gf47.github.io/2018/03/09/Gogs_in_Raspberry_Pi/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>在树莓派上搭建Gogs服务 | GF47的鱼缸</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GF47的鱼缸</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">欸乃一声山水绿</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gf47.github.io/2018/03/09/Gogs_in_Raspberry_Pi/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GF47">
+      <meta itemprop="description" content="Unity 3D 咸鱼一条,偶尔在Python和lua里游一游">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GF47的鱼缸">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在树莓派上搭建Gogs服务
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-09 20:36:59" itemprop="dateCreated datePublished" datetime="2018-03-09T20:36:59+08:00">2018-03-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/树莓派/" itemprop="url" rel="index"><span itemprop="name">树莓派</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/09/Gogs_in_Raspberry_Pi/" class="leancloud_visitors" data-flag-title="在树莓派上搭建Gogs服务">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>新到手了一个树莓派板子，省电又不占地方，遂玩耍一番。</p>
+<p>为什么选择Gogs而不是GitLab，很明显，以GitLab的量级来说，相当于津巴布韦总统捏着一颗核弹，一搭好，这个板子就可以放那吃灰了。而Gogs这种小当量的玩意，对树莓派来说刚好合适。</p>
+<h1 id="在树莓派上搭建Gogs服务"><a href="#在树莓派上搭建Gogs服务" class="headerlink" title="在树莓派上搭建Gogs服务"></a>在树莓派上搭建Gogs服务</h1><hr>
+<h2 id="Gogs"><a href="#Gogs" class="headerlink" title="Gogs"></a>Gogs</h2><ul>
+<li>首页<a href="https://gogs.io" target="_blank" rel="noopener">https://gogs.io</a></li>
+<li>下载<a href="https://gogs.io/docs/installation/install_from_binary" target="_blank" rel="noopener">https://gogs.io/docs/installation/install_from_binary</a></li>
+</ul>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><p>gogs是用go语言编写的，树莓派的Raspbian系统是有go运行环境的，而且gogs也提供了树莓派版本，直接下载就好。<br><img src="/2018/03/09/Gogs_in_Raspberry_Pi/download.png" alt="下载位置"></p>
+<ul>
+<li>解压缩到指定位置 <code>unzip raspi2_armv6.zip</code></li>
+<li>转到目录<code>cd gogs</code></li>
+<li>直接运行<code>./gogs</code>会列出相关参数。</li>
+<li>输入<code>./gogs web</code>尝试开启服务器<blockquote>
+<p>gogs默认监听<code>3000</code>端口</p>
+</blockquote>
+</li>
+<li><p>在同一网段上的浏览器访问树莓派的IP，记得加上3000的端口号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.244：3000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第一次访问会出现gogs配置界面，按需设置</p>
+<ul>
+<li>选择数据库类型，由于是在津巴布韦，我们依旧选择一个小当量的SQLite3，数据保存在一个db文件内。</li>
+<li>应用名称随便填，怎么搞怪怎么来。</li>
+<li>仓库根目录比较重要，默认应该是<em>/home/pi/gogs-repositoryes</em></li>
+<li>运行系统用户就用pi就行，没必要建立一个新用户了。</li>
+<li><p>域名填树莓派的IP地址</p>
+<blockquote>
+<p>误1，这么玩会在换局域网环境后出现ssh克隆失败的情况，稍后解决</p>
+</blockquote>
+</li>
+<li><p>应用URL为<em>http://树莓派IP地址:3000/</em></p>
+<blockquote>
+<p>误2，同上，在换局域网环境后出现访问失败的情况</p>
+</blockquote>
+</li>
+<li><p>其他基本默认</p>
+</li>
+<li>管理员可选可不选，第一个用户自动为管理员</li>
+</ul>
+</li>
+<li>点击<strong>立即安装</strong>即可</li>
+<li>随后出现控制面板，可以进行注册新用户等操作<blockquote>
+<p>关于添加ssh密钥，如果最开始gogs的运行系统用户选择了pi，请不要选择<strong>远程登录树莓派的密钥</strong>（即Windows系统的<em>C:\Users\用户名.ssh</em>里的默认密钥和Linux系统中的<em>/home/用户名/.ssh</em>里的默认密钥），不然远程ssh的时候会被gogs拒绝，非常尴尬的问题。要避免也很简单，gogs和ssh远程登录这俩别共用一个账号就行，或者远程的时候sudo一下。</p>
+</blockquote>
+<h3 id="gogs服务自动启动"><a href="#gogs服务自动启动" class="headerlink" title="gogs服务自动启动"></a>gogs服务自动启动</h3></li>
+<li><p>gogs文件夹里有一个server脚本，位置在<em>~/gogs/scripts/systemd/gogs.service</em>，复制到系统服务目录就行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp ~/gogs/scripts/systemd/gogs.service /etc/systemd/system</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于使用的账户是pi，并非新建的git，所以需要修改服务脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/systemd/system/gogs.service</span><br><span class="line">%s/git/pi/g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置开机自动运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> gogs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动gogs</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start gogs</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="gogs配置文件"><a href="#gogs配置文件" class="headerlink" title="gogs配置文件"></a>gogs配置文件</h3><p>上述操作完成后，转到<em>~/gogs/custom/conf/app.ini</em>，注意<strong>server</strong>的配置<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[server]</span></span><br><span class="line"><span class="attr">PROTOCOL</span>  = http</span><br><span class="line"><span class="attr">DOMAIN</span>    = GF47_pi</span><br><span class="line"><span class="attr">ROOT_URL</span>  = http://localhost/git/</span><br><span class="line"><span class="attr">HTTP_ADDR</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">HTTP_PORT</span> = <span class="number">3000</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>我这是设置nginx代理的配置，如果不设代理，那就只能使用静态IP了，而且输入地址的时候还要加端口号，这对于我这种瞎折腾的不是很方便。<br>如果想设置代理可以改成以上的配置，之后我再说一下nginx的配置。<br>算了，一块贴出来吧。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">	listen 80;</span><br><span class="line">	server_name localhost;</span><br><span class="line">	location /git/ &#123;</span><br><span class="line">		proxy_redirect off;</span><br><span class="line">		proxy_set_header Host $host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http://127.0.0.1:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">	location /blog &#123;</span><br><span class="line">		rewrite ^/blog(.*) http://$host:4000$1 redirect;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在浏览器里只需要输入<em>树莓派IP/git</em>就会跳到gogs界面了，不用弄静态IP，怪不方便的。<br>需要注意的是proxy_pass的地址斜杠问题，加斜杠和不加斜杠意思是不同的。<br>下边的blog是树莓派上的搭的Hexo博客，有空再说。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/树莓派/" rel="tag"># 树莓派</a>
+          
+            <a href="/tags/Gogs/" rel="tag"># Gogs</a>
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/14/Intel i915 driver for ubuntu/" rel="prev" title="Intel i915 driver for ubuntu">
+                Intel i915 driver for ubuntu <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="GF47">
+            
+              <p class="site-author-name" itemprop="name">GF47</p>
+              <p class="site-description motion-element" itemprop="description">Unity 3D 咸鱼一条,偶尔在Python和lua里游一游</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/GF47" title="GitHub &rarr; https://github.com/GF47" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:liougourenmo@gmail.com" title="E-Mail &rarr; mailto:liougourenmo@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在树莓派上搭建Gogs服务"><span class="nav-number">1.</span> <span class="nav-text">在树莓派上搭建Gogs服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gogs"><span class="nav-number">1.1.</span> <span class="nav-text">Gogs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gogs服务自动启动"><span class="nav-number">1.1.2.</span> <span class="nav-text">gogs服务自动启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gogs配置文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">gogs配置文件</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GF47</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "aBji1KCAd8ffRsjGAmnl52QB-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "aBji1KCAd8ffRsjGAmnl52QB-gzGzoHsz",
+                'X-LC-Key': "QNuwEsJzfoU703CGEK3ocenV",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

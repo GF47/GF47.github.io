@@ -326,6 +326,240 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gf47.github.io/2019/01/05/A_rapid_calculation_of_5/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GF47">
+      <meta itemprop="description" content="Unity 3D 咸鱼一条,偶尔在Python和lua里游一游">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GF47的鱼缸">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/05/A_rapid_calculation_of_5/" class="post-title-link" itemprop="url">一个5的速算法，由此引发的乱七八糟的想法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-05 03:35:00 / 修改时间：17:19:15" itemprop="dateCreated datePublished" datetime="2019-01-05T03:35:00+08:00">2019-01-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/01/05/A_rapid_calculation_of_5/" class="leancloud_visitors" data-flag-title="一个5的速算法，由此引发的乱七八糟的想法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="一个5的速算法，由此引发的乱七八糟的想法"><a href="#一个5的速算法，由此引发的乱七八糟的想法" class="headerlink" title="一个5的速算法，由此引发的乱七八糟的想法"></a>一个5的速算法，由此引发的乱七八糟的想法</h1><hr>
+<p>过年回家看小侄子在玩算术卡片，跟孩子玩了一会儿。然后逛b呼看见一个挺热的话题——<a href="https://www.zhihu.com/question/307595822" target="_blank" rel="noopener">证明：哥德巴赫猜想</a>，突然想起来当年上初一时候胡思乱想碰出来的一个关于5的速算法。当时想着跟同桌装逼，然后验算的时候发现原理极其简单……只是那时候刚刚学代数，还没把xyz用熟练。还好装逼前冷静了一把，233。<br>由此可见，先进的数学工具是多么重要。感谢傅里叶，感谢泰勒，感谢发明矩阵的那一票人，感谢cctv……</p>
+<h2 id="归纳"><a href="#归纳" class="headerlink" title="归纳"></a>归纳</h2><h3 id="尾数为5的数的平方"><a href="#尾数为5的数的平方" class="headerlink" title="尾数为5的数的平方"></a>尾数为5的数的平方</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5 * 5 = 25</td>
+<td>0 = 0 * 1</td>
+</tr>
+<tr>
+<td>15 * 15 = 225</td>
+<td>2 = 1 * 2</td>
+</tr>
+<tr>
+<td>25 * 25 = 625</td>
+<td>6 = 2 * 3</td>
+</tr>
+<tr>
+<td>35 * 35 = 1225</td>
+<td>12 = 3 * 4</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>(x * 10 + 5) * (x * 10 + 5) = (x * x + x) * 100 + 25</td>
+</tr>
+</tbody>
+</table>
+<p>于是可以快速计算 <code>255 * 255</code> 的结果为 <code>(25 * 25 + 25) * 100 + 25</code> ，即 <code>(((2 * 2 + 2) * 100 + 25) + 25) * 100 + 25</code> ，即 <code>65025</code> 。<br>同理， <code>355 * 355</code> 的结果为 <code>(35* 35 + 35) * 100 + 25</code> ，即 <code>(((3 * 3 + 3) * 100 + 25) + 35) * 100 + 25</code> ， 即 <code>126025</code> 。<br>写起来很麻烦，其实心算挺快的，本来到这就想着找个机会把这个b抖出来，不过想了想怎么扩展一下应用范围，然后就有了下边的一坨。</p>
+<h3 id="两个不同的尾数为5的数的乘积"><a href="#两个不同的尾数为5的数的乘积" class="headerlink" title="两个不同的尾数为5的数的乘积"></a>两个不同的尾数为5的数的乘积</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15 * 25 = 375</td>
+<td>35 = 1 *2 * 10 + (1 + 2) * 5</td>
+</tr>
+<tr>
+<td>15 * 45 = 675</td>
+<td>65 = 1 * 4 * 10 + (1 + 4) * 5</td>
+</tr>
+<tr>
+<td>15 * 65 = 975</td>
+<td>95 = 1 * 6 * 10 + (1 + 6) * 5</td>
+</tr>
+<tr>
+<td>…</td>
+</tr>
+<tr>
+<td>25 * 45 = 1125</td>
+<td>110 = 2 * 4 * 10 + (2 + 4) * 5</td>
+</tr>
+<tr>
+<td>25 * 65 = 1625</td>
+<td>160 = 2 * 6 * 10 + (2 + 6) * 5</td>
+</tr>
+<tr>
+<td>25 * 85 = 2125</td>
+<td>210 = 2 * 8 * 10 + (2 + 8) * 5</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>(x * 10 + 5) * (y * 10 + 5) = (x * y * 10 + (x + y) * 5) * 10 + 25</td>
+</tr>
+</tbody>
+</table>
+<p>记得以上的规律凑出来大概花了我两节自习课的时间，结果把提取出来的规律写成式子瞬间我就笑了。咩咩的这不就普通的因式分解嘛。再仔细想想，大概所有的速算法都是xyz和10的倍数相结合的产物，甚至直接从珠算里挪来口诀啥的。  </p>
+<p>如果前提是没学代数，这些算法还是挺唬人的，至少在小学阶段是可以笑傲群雄了。但如果接触到更高级点的数学工具，这些特例方法终归会被更具普适性的算法所解释。就如观星仪之于牛顿三定律，牛顿三定律之于爱因斯坦的侠义相对论一样。知乎的那位高中生在高中有限的知识体系下去理解哥德巴赫猜想，就差不多类似于以上情况了。<br>大概，想证明歌德巴赫猜想真的需要发明一套新的数学工具吧，毕竟我们对这个世界也仅仅是管中窥豹罢了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://gf47.github.io/2018/12/29/gvim8_YCM/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -700,7 +934,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>配置<br>打开<em><code>_config.yml</code></em>文件，修改最后的<code>deploy</code>项。</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:GF47/GF47.github.io.git</span></span><br><span class="line">  <span class="string">branch：master</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:GF47/GF47.github.io.git</span></span><br><span class="line">  <span class="string">branch：master</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>如何配置可以参考官方文档：<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">部署</a><br>或者自己使用git提交，不过比较麻烦就是了。</p>
@@ -1186,7 +1420,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
